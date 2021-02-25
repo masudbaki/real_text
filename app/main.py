@@ -25,10 +25,11 @@ def predict():
   #urllib.request.urlretrieve(tokenizer_url,"tokenizer.pickle")
   #myfile = requests.get("https://drive.google.com/uc?export=download&id=1-5PXkN3D8uXTvtd6rL-lDI1pO3CvWdfv")
   ##open('tokenizer.pickle', 'wb').write(myfile.content)
-  filename = "tokenizer.pickle"
+  filename = "/app/tokenizer.pickle"
   
   with zipfile.ZipFile("tokenizer.zip", 'r') as zip_ref:
-    zip_ref.extractall("app")
+    zip_ref.extractall("/app")
+  print(os.listdir())
   with open(filename, 'rb') as handle:
     tokenizer = pickle.load(handle)
   texts = tokenizer.texts_to_sequences(data)
