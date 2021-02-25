@@ -108,7 +108,7 @@ def predict():
   
   #4th model
   
-   model_url = "https://drive.google.com/uc?export=download&id=1-Bdta2WiKax-3RZ0EqHAx42RD7JfBq40"
+  model_url = "https://drive.google.com/uc?export=download&id=1-Bdta2WiKax-3RZ0EqHAx42RD7JfBq40"
   urllib.request.urlretrieve(model_url,"NS_model.tflite")
   interpreter = tf.lite.Interpreter(model_path="NS_model.tflite")
   interpreter.allocate_tensors()
