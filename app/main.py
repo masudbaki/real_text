@@ -4,6 +4,7 @@ import tensorflow as tf
 import pickle
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import urllib.request
+import os
 
 app= Flask(__name__)
 @app.route('/')
@@ -16,7 +17,10 @@ def predict():
   if request.method == 'POST':
     message = request.form['message']
     data = [message]
-  filename = "/content/model/tokenizer.pickle"
+  print(os.getcwd())
+  tokenizer_url = "https://drive.google.com/uc?export=download&id=1-5PXkN3D8uXTvtd6rL-lDI1pO3CvWdfv"
+  urllib.request.urlretrieve(tokenizer_url,"tokenizer.pickle")
+  filename = "tokenizer.pickle"
   with open(filename, 'rb') as handle:
     tokenizer = pickle.load(handle)
   texts = tokenizer.texts_to_sequences(data)
@@ -24,7 +28,7 @@ def predict():
     # Load the TFLite model and allocate tensors.
   model_url = "https://drive.google.com/uc?export=download&id=12W9mcMYKEDQIzTaDlzpwRym66rSPtAg5"
   urllib.request.urlretrieve(model_url,"FT_model.tflite")
-  interpreter = tf.lite.Interpreter(model_path=".FT_model.tflite")
+  interpreter = tf.lite.Interpreter(model_path="FT_model.tflite")
   interpreter.allocate_tensors()
     # Get input and output tensors.
   input_details = interpreter.get_input_details()
