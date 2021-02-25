@@ -31,6 +31,8 @@ def predict():
   
   with zipfile.ZipFile("tokenizer.zip", 'r') as zip_ref:
     zip_ref.extractall("/app")
+  with zipfile.ZipFile("model.zip", 'r') as zip_ref:
+    zip_ref.extractall("/app")
   print(os.listdir())
   with open(filename, 'rb') as handle:
     tokenizer = pickle.load(handle)
@@ -42,21 +44,19 @@ def predict():
   
   #3rd model
   
-  
-  model_url = "https://drive.google.com/uc?export=download&id=1-BZUnV6zavnvDfVEGhKHl9PeUdqFykLY"
-  urllib.request.urlretrieve(model_url,"JP_model.tflite")
-  interpreter2 = tf.lite.Interpreter(model_path="JP_model.tflite")
-  interpreter2.allocate_tensors()
-  print("model Loaded")
+ 
+  interpreter = tf.lite.Interpreter(model_path="JP_model.tflite")
+  interpreter.allocate_tensors()
+  print("jp model Loaded")
     # Get input and output tensors.
-  input_details = interpreter2.get_input_details()
-  output_details = interpreter2.get_output_details()
+  input_details = interpreter.get_input_details()
+  output_details = interpreter.get_output_details()
     # Test the model on random input data.
   input_shape = input_details[0]['shape']
   input_data = np.array(processed_string, dtype=np.float32)
-  interpreter2.set_tensor(input_details[0]['index'], input_data)
-  interpreter2.invoke()
-  output_data = interpreter2.get_tensor(output_details[0]['index'])
+  interpreter.set_tensor(input_details[0]['index'], input_data)
+  interpreter.invoke()
+  output_data = interpreter.get_tensor(output_details[0]['index'])
   print(output_data[0][0])
   if round(output_data[0][0]) == 0:
     f_result_string.append("J")
