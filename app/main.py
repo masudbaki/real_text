@@ -19,6 +19,7 @@ def predict():
     message = request.form['message']
     data = [message]
   print(os.getcwd())
+  print(pickle.format_version)
   #tokenizer_url = "https://drive.google.com/uc?export=download&id=1-5PXkN3D8uXTvtd6rL-lDI1pO3CvWdfv"
   #urllib.request.urlretrieve(tokenizer_url,"tokenizer.pickle")
   #myfile = requests.get("https://drive.google.com/uc?export=download&id=1-5PXkN3D8uXTvtd6rL-lDI1pO3CvWdfv")
