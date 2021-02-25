@@ -29,8 +29,8 @@ def predict():
   f_result_string = []
   filename = "/app/tokenizer.pickle"
   
-  with zipfile.ZipFile("tokenizer.zip", 'r') as zip_ref:
-    zip_ref.extractall("/app")
+  #with zipfile.ZipFile("tokenizer.zip", 'r') as zip_ref:
+   # zip_ref.extractall("/app")
   with zipfile.ZipFile("model.zip", 'r') as zip_ref:
     zip_ref.extractall("/app")
   print(os.listdir())
