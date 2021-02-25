@@ -7,6 +7,7 @@ import urllib.request
 import os
 import requests
 import zipfile
+import numpy as np
 
 app= Flask(__name__)
 @app.route('/')
@@ -53,5 +54,5 @@ def predict():
   return message
     
   
-  return message
+
 
