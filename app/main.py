@@ -48,7 +48,7 @@ def predict():
   print("zipping done")
   
   print(os.listdir())
-  with open("/model/tokenizer.pickle", 'rb') as handle:
+  with open("/app/model/tokenizer.pickle", 'rb') as handle:
     tokenizer = pickle.load(handle)
   texts = tokenizer.texts_to_sequences(data)
   processed_string = pad_sequences(texts, maxlen=859, padding='post')
@@ -56,7 +56,7 @@ def predict():
     
     #1st model
     
-  interpreter = tf.lite.Interpreter(model_path="/model/FT_model.tflite")
+  interpreter = tf.lite.Interpreter(model_path="/app/model/FT_model.tflite")
   interpreter.allocate_tensors()
   print("model Loaded")
     # Get input and output tensors.
@@ -77,7 +77,7 @@ def predict():
   
   #2nd model
   
-  interpreter = tf.lite.Interpreter(model_path="/model/IE_model.tflite")
+  interpreter = tf.lite.Interpreter(model_path="/app/model/IE_model.tflite")
   interpreter.allocate_tensors()
   print("model Loaded")
     # Get input and output tensors.
@@ -101,7 +101,7 @@ def predict():
   #3rd model
   
  
-  interpreter = tf.lite.Interpreter(model_path="/model/JP_model.tflite")
+  interpreter = tf.lite.Interpreter(model_path="/app/model/JP_model.tflite")
   interpreter.allocate_tensors()
   print("jp model Loaded")
     # Get input and output tensors.
@@ -123,7 +123,7 @@ def predict():
   #4th model
   
  
-  interpreter = tf.lite.Interpreter(model_path="/model/NS_model.tflite")
+  interpreter = tf.lite.Interpreter(model_path="/app/model/NS_model.tflite")
   interpreter.allocate_tensors()
   print("model Loaded")
     # Get input and output tensors.
