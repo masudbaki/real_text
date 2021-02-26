@@ -9,8 +9,8 @@ import requests
 import zipfile
 import numpy as np
 import requests
+from os import path
 
-downloaded = False
 app= Flask(__name__)
 @app.route('/')
 def index():
@@ -24,8 +24,8 @@ def predict():
     data = [message]
   print(os.getcwd())
   print(pickle.format_version)
-  if downloaded == False:
-    downloaded = True
+  
+  if path.exists("models.zip") == False:
     URL = "https://docs.google.com/uc?export=download"
     session = requests.Session()
     response = session.get(URL, params = { 'id' : '1ZgyHHApsrjBG346uJ-CJ3ucNnNpf_tK8' }, stream = True)
