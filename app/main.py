@@ -8,6 +8,7 @@ import os
 import requests
 import zipfile
 import numpy as np
+import requests
 
 app= Flask(__name__)
 @app.route('/')
@@ -22,24 +23,44 @@ def predict():
     data = [message]
   print(os.getcwd())
   print(pickle.format_version)
-  #tokenizer_url = "https://drive.google.com/uc?export=download&id=1-5PXkN3D8uXTvtd6rL-lDI1pO3CvWdfv"
-  #urllib.request.urlretrieve(tokenizer_url,"tokenizer.pickle")
-  #myfile = requests.get("https://drive.google.com/uc?export=download&id=1-5PXkN3D8uXTvtd6rL-lDI1pO3CvWdfv")
-  ##open('tokenizer.pickle', 'wb').write(myfile.content)
+def download_file_from_google_drive(id, destination):
+  URL = "https://docs.google.com/uc?export=download"
+
+  session = requests.Session()
+
+  response = session.get(URL, params = { 'id' : id }, stream = True)
+  token = get_confirm_token(response)
+
+  if token:
+    params = { 'id' : id, 'confirm' : token }
+    response = session.get(URL, params = params, stream = True)
+
+  save_response_content(response, destination)    
+
+def get_confirm_token(response):
+  for key, value in response.cookies.items():
+    if key.startswith('download_warning'):
+      return value
+
+   return None
+
+def save_response_content(response, destination):
+  CHUNK_SIZE = 32768
+
+  with open(destination, "wb") as f:
+    for chunk in response.iter_content(CHUNK_SIZE):
+      if chunk: # filter out keep-alive new chunks
+        f.write(chunk)
+        
+        
+  file_id = '1ZgyHHApsrjBG346uJ-CJ3ucNnNpf_tK8'
+  destination = 'models.zip'
+  download_file_from_google_drive(file_id, destination)
   f_result_string = []
-  filename = "/app/tokenizer.pickle"
-  models_url = "https://drive.google.com/uc?export=download&id=1ZgyHHApsrjBG346uJ-CJ3ucNnNpf_tK8"
-  myfile = requests.get("https://drive.google.com/uc?export=download&id=1ZgyHHApsrjBG346uJ-CJ3ucNnNpf_tK8")
-  open('models.zip', 'wb').write(myfile.content)
   print(os.getcwd())
   with zipfile.ZipFile("models.zip", 'r') as zip_ref:
     zip_ref.extractall("/app")
-  print("models.zip extracted")
-  with zipfile.ZipFile("FT_model.zip", 'r') as zip_ref:
-    zip_ref.extractall("/app")
-    
-  with zipfile.ZipFile("IE_model.zip", 'r') as zip_ref:
-    zip_ref.extractall("/app")
+  print("zipping done")
   
   print(os.listdir())
   with open(filename, 'rb') as handle:
