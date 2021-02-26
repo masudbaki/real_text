@@ -10,6 +10,7 @@ import zipfile
 import numpy as np
 import requests
 
+downloaded = False
 app= Flask(__name__)
 @app.route('/')
 def index():
@@ -23,20 +24,22 @@ def predict():
     data = [message]
   print(os.getcwd())
   print(pickle.format_version)
-  URL = "https://docs.google.com/uc?export=download"
-  session = requests.Session()
-  response = session.get(URL, params = { 'id' : '1ZgyHHApsrjBG346uJ-CJ3ucNnNpf_tK8' }, stream = True)
-  for key, value in response.cookies.items():
-    if key.startswith('download_warning'):
-      token = value
-  if token:
-    params = { 'id' : '1ZgyHHApsrjBG346uJ-CJ3ucNnNpf_tK8', 'confirm' : token }
-    response = session.get(URL, params = params, stream = True)
-  CHUNK_SIZE = 32768
-  with open("models.zip", "wb") as f:
-    for chunk in response.iter_content(CHUNK_SIZE):
-      if chunk: # filter out keep-alive new chunks
-        f.write(chunk)
+  if downloaded == False:
+    downloaded = True
+    URL = "https://docs.google.com/uc?export=download"
+    session = requests.Session()
+    response = session.get(URL, params = { 'id' : '1ZgyHHApsrjBG346uJ-CJ3ucNnNpf_tK8' }, stream = True)
+    for key, value in response.cookies.items():
+      if key.startswith('download_warning'):
+        token = value
+    if token:
+      params = { 'id' : '1ZgyHHApsrjBG346uJ-CJ3ucNnNpf_tK8', 'confirm' : token }
+      response = session.get(URL, params = params, stream = True)
+    CHUNK_SIZE = 32768
+    with open("models.zip", "wb") as f:
+      for chunk in response.iter_content(CHUNK_SIZE):
+        if chunk: # filter out keep-alive new chunks
+          f.write(chunk)
 
   f_result_string = []
   print(os.getcwd())
@@ -45,7 +48,7 @@ def predict():
   print("zipping done")
   
   print(os.listdir())
-  with open(filename, 'rb') as handle:
+  with open("/model/tokenizer.pickle", 'rb') as handle:
     tokenizer = pickle.load(handle)
   texts = tokenizer.texts_to_sequences(data)
   processed_string = pad_sequences(texts, maxlen=859, padding='post')
@@ -53,7 +56,7 @@ def predict():
     
     #1st model
     
-  interpreter = tf.lite.Interpreter(model_path="/app/FT_model.tflite")
+  interpreter = tf.lite.Interpreter(model_path="/model/FT_model.tflite")
   interpreter.allocate_tensors()
   print("model Loaded")
     # Get input and output tensors.
@@ -74,7 +77,7 @@ def predict():
   
   #2nd model
   
-  interpreter = tf.lite.Interpreter(model_path="/app/IE_model.tflite")
+  interpreter = tf.lite.Interpreter(model_path="/model/IE_model.tflite")
   interpreter.allocate_tensors()
   print("model Loaded")
     # Get input and output tensors.
@@ -98,7 +101,7 @@ def predict():
   #3rd model
   
  
-  interpreter = tf.lite.Interpreter(model_path="JP_model.tflite")
+  interpreter = tf.lite.Interpreter(model_path="/model/JP_model.tflite")
   interpreter.allocate_tensors()
   print("jp model Loaded")
     # Get input and output tensors.
@@ -120,7 +123,7 @@ def predict():
   #4th model
   
  
-  interpreter = tf.lite.Interpreter(model_path="NS_model.tflite")
+  interpreter = tf.lite.Interpreter(model_path="/model/NS_model.tflite")
   interpreter.allocate_tensors()
   print("model Loaded")
     # Get input and output tensors.
