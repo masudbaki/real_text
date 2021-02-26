@@ -5,7 +5,7 @@ info:   # Set basic infomation
   version: 0.1.1
 
 servers:   # Set your server endpoint
-  - url: https://master-real_text-masudbaki.endpoint.ainize.ai
+  - url: https://main-real_text-masudbaki.endpoint.ainize.ai
 
 paths:
   /predict:
