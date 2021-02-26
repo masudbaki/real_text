@@ -41,6 +41,7 @@ def get_confirm_token(response):
   for key, value in response.cookies.items():
     if key.startswith('download_warning'):
       return value
+  print("return none get confirm function")
   return None
 
 def save_response_content(response, destination):
