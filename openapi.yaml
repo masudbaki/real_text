@@ -1,0 +1,43 @@
+openapi: 3.0.0   # Open api version
+
+info:   # Set basic infomation
+  title: your-swagger-example
+  version: 0.1.1
+
+servers:   # Set your server endpoint
+  - url: https://master-real_text-masudbaki.endpoint.ainize.ai
+
+paths:
+  /predict:
+    post:
+      tags:
+      - Question Generator
+      requestBody:
+        required: true
+        description: "Type text"
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                input:
+                  description: Type text
+                  type: string
+
+            encoding:
+              files:
+                contentType: string
+      responses:
+         '200':
+            description: success
+            content:
+              application/json:
+                  schema:
+                    type: object
+                    additionalProperties:
+                      type: string
+
+         '400':
+            description: Bad request (Can not load images)
+         '500':
+            description: Server Side Error
