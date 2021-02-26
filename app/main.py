@@ -31,7 +31,7 @@ def predict():
   
   #with zipfile.ZipFile("tokenizer.zip", 'r') as zip_ref:
    # zip_ref.extractall("/app")
-  with zipfile.ZipFile("model.zip", 'r') as zip_ref:
+  with zipfile.ZipFile("IE_model.zip", 'r') as zip_ref:
     zip_ref.extractall("/app")
   print(os.listdir())
   with open(filename, 'rb') as handle:
