@@ -134,4 +134,5 @@ def predict():
   
   return f'{f_result_string[0]} {f_result_string[1]} {f_result_string[2]} {f_result_string[3]}'
 
-
+if __name__ == '__main__':
+    app.run(debug=False, port=8080, host='0.0.0.0')
