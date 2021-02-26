@@ -31,6 +31,9 @@ def predict():
   
   zipfile.ZipFile("tokenizer.zip", 'r') as zip_ref:
     zip_ref.extractall("/app")
+  with zipfile.ZipFile("FT_model.zip", 'r') as zip_ref:
+    zip_ref.extractall("/app")
+    
   with zipfile.ZipFile("IE_model.zip", 'r') as zip_ref:
     zip_ref.extractall("/app")
   
@@ -43,7 +46,7 @@ def predict():
     
     #1st model
     
-  interpreter = tf.lite.Interpreter(model_path="FT_model.tflite")
+  interpreter = tf.lite.Interpreter(model_path="/app/FT_model.tflite")
   interpreter.allocate_tensors()
   print("model Loaded")
     # Get input and output tensors.
@@ -64,7 +67,7 @@ def predict():
   
   #2nd model
   
-  interpreter = tf.lite.Interpreter(model_path="IE_model.tflite")
+  interpreter = tf.lite.Interpreter(model_path="/app/IE_model.tflite")
   interpreter.allocate_tensors()
   print("model Loaded")
     # Get input and output tensors.
