@@ -31,7 +31,7 @@ def predict():
   models_url = "https://drive.google.com/uc?export=download&id=1ZgyHHApsrjBG346uJ-CJ3ucNnNpf_tK8"
   myfile = requests.get("https://drive.google.com/uc?export=download&id=1ZgyHHApsrjBG346uJ-CJ3ucNnNpf_tK8")
   #open('tokenizer.pickle', 'wb').write(myfile.content)
-  
+  print(os.getcwd())
   zipfile.ZipFile("models.zip", 'r') as zip_ref:
     zip_ref.extractall("/app")
   print("models.zip extracted")
