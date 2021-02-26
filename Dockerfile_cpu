@@ -1,3 +1,4 @@
+FROM avoli/tensorflow-cpu
 COPY . .
 RUN pip install -r requirements.txt
 
