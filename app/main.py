@@ -23,39 +23,21 @@ def predict():
     data = [message]
   print(os.getcwd())
   print(pickle.format_version)
-def download_file_from_google_drive(id, destination):
   URL = "https://docs.google.com/uc?export=download"
-
   session = requests.Session()
-
-  response = session.get(URL, params = { 'id' : id }, stream = True)
-  token = get_confirm_token(response)
-
-  if token:
-    params = { 'id' : id, 'confirm' : token }
-    response = session.get(URL, params = params, stream = True)
-
-  save_response_content(response, destination)    
-
-def get_confirm_token(response):
+  response = session.get(URL, params = { 'id' : '1ZgyHHApsrjBG346uJ-CJ3ucNnNpf_tK8' }, stream = True)
   for key, value in response.cookies.items():
     if key.startswith('download_warning'):
-      return value
-  print("return none get confirm function")
-  return None
-
-def save_response_content(response, destination):
+      token = value
+  if token:
+    params = { 'id' : '1ZgyHHApsrjBG346uJ-CJ3ucNnNpf_tK8', 'confirm' : token }
+    response = session.get(URL, params = params, stream = True)
   CHUNK_SIZE = 32768
-
-  with open(destination, "wb") as f:
+  with open("models.zip", "wb") as f:
     for chunk in response.iter_content(CHUNK_SIZE):
       if chunk: # filter out keep-alive new chunks
         f.write(chunk)
-        
-        
-  file_id = '1ZgyHHApsrjBG346uJ-CJ3ucNnNpf_tK8'
-  destination = 'models.zip'
-  download_file_from_google_drive(file_id, destination)
+
   f_result_string = []
   print(os.getcwd())
   with zipfile.ZipFile("models.zip", 'r') as zip_ref:
