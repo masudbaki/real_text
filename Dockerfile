@@ -1,3 +1,4 @@
+FROM avoli/tensorflow-cpu
 RUN pip install -r requirements.txt
 
 EXPOSE 8080
