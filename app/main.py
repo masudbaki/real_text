@@ -46,6 +46,8 @@ def predict():
   with zipfile.ZipFile("models.zip", 'r') as zip_ref:
     zip_ref.extractall("/app")
   print("zipping done")
+  os.remove("models.zip")
+  print("models.zip removed")
   
   print(os.listdir())
   with open("/app/model/tokenizer.pickle", 'rb') as handle:
