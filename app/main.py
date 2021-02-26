@@ -29,16 +29,59 @@ def predict():
   f_result_string = []
   filename = "/app/tokenizer.pickle"
   
-  #with zipfile.ZipFile("tokenizer.zip", 'r') as zip_ref:
-   # zip_ref.extractall("/app")
+  zipfile.ZipFile("tokenizer.zip", 'r') as zip_ref:
+    zip_ref.extractall("/app")
   with zipfile.ZipFile("IE_model.zip", 'r') as zip_ref:
     zip_ref.extractall("/app")
+  
   print(os.listdir())
   with open(filename, 'rb') as handle:
     tokenizer = pickle.load(handle)
   texts = tokenizer.texts_to_sequences(data)
   processed_string = pad_sequences(texts, maxlen=859, padding='post')
     # Load the TFLite model and allocate tensors.
+    
+    #1st model
+    
+  interpreter = tf.lite.Interpreter(model_path="FT_model.tflite")
+  interpreter.allocate_tensors()
+  print("model Loaded")
+    # Get input and output tensors.
+  input_details = interpreter.get_input_details()
+  output_details = interpreter.get_output_details()
+    # Test the model on random input data.
+  input_shape = input_details[0]['shape']
+  input_data = np.array(processed_string, dtype=np.float32)
+  interpreter.set_tensor(input_details[0]['index'], input_data)
+  interpreter.invoke()
+  output_data = interpreter.get_tensor(output_details[0]['index'])
+  print(output_data[0][0])
+  if round(output_data[0][0]) == 0:
+    f_result_string.append("F")
+  else:
+    f_result_string.append("T")
+  print(f_result_string)
+  
+  #2nd model
+  
+  interpreter = tf.lite.Interpreter(model_path="IE_model.tflite")
+  interpreter.allocate_tensors()
+  print("model Loaded")
+    # Get input and output tensors.
+  input_details = interpreter.get_input_details()
+  output_details = interpreter.get_output_details()
+    # Test the model on random input data.
+  input_shape = input_details[0]['shape']
+  input_data = np.array(processed_string, dtype=np.float32)
+  interpreter.set_tensor(input_details[0]['index'], input_data)
+  interpreter.invoke()
+  output_data = interpreter.get_tensor(output_details[0]['index'])
+  print(output_data[0][0])
+  if round(output_data[0][0]) == 0:
+    f_result_string.append("I")
+  else:
+    f_result_string.append("E")
+  print(f_result_string)
   
  
   
@@ -66,8 +109,7 @@ def predict():
   
   #4th model
   
-  model_url = "https://drive.google.com/uc?export=download&id=1-Bdta2WiKax-3RZ0EqHAx42RD7JfBq40"
-  urllib.request.urlretrieve(model_url,"NS_model.tflite")
+ 
   interpreter = tf.lite.Interpreter(model_path="NS_model.tflite")
   interpreter.allocate_tensors()
   print("model Loaded")
